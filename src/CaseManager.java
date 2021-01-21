@@ -18,7 +18,7 @@ public class CaseManager {
 		}
 
 		for (int i = 0; i < contentsInPlay.size(); i++) {
-			contentsInPlay.get(i).setCaseNum(i + 1);
+			contentsInPlay.get(i).setCaseNum(i+1);
 		}
 		
 		caseChoices = (ArrayList<OpenableCase>) contentsInPlay.clone();
@@ -34,17 +34,28 @@ public class CaseManager {
 		}
 	}
 	
-	public void selectCase(int caseNum1, int caseNum2) {
-		assert(caseNum1 != caseNum2 && caseNum1 > 0 && caseNum2 > 0 && caseNum1 <= contentsInPlay.size() && caseNum2 <= contentsInPlay.size());
+	public boolean selectCase(int caseChosen) {
+		assert(caseChosen > 0 &&  caseChosen <= contentsInPlay.size());
+		
+		if(selection1 != null && selection2!=(null))
+			return true;
 		
 		for (OpenableCase c : contentsInPlay) {
-			if (c.getCaseNum() == caseNum1) {
-				selection1 = c;
-			}else if (c.getCaseNum() == caseNum2) {
-				selection2 = c;
+			if (c.getCaseNum() == caseChosen) {
+				if (selection1==null)
+					selection1 = c;
+				else if (caseChosen == selection1.getCaseNum())
+					//ensure selection1 and 2 are not the same case
+					return false;
+				else {
+					//returns true once both selections have been made
+					selection2 = c;
+					return true;
+				}
 			}
 		}
-		
+		//somehow the case number did not match up
+		return false;		
 	}
 	
 	public void getSelections() {
