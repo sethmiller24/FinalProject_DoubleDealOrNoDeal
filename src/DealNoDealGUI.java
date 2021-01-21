@@ -15,18 +15,26 @@ import javax.swing.JPanel;
 
 public class DealNoDealGUI extends JComponent implements ActionListener, MouseListener{
 	CaseManager cm = new CaseManager();
-	ArrayList<OpenableCase> cases;
 	
-	OpenableCase selected;
+	OpenableCase selected = null;
+	
+	JButton rmvBtn= new JButton("Remove");
 		
 	public void init() {
+		this.setLayout(new BorderLayout());
+		
 		this.addMouseListener(this);
+		this.add(rmvBtn, BorderLayout.NORTH); 
+		rmvBtn.addActionListener(this);
+		
 		cm.resetCaseList();
 	}
 
 	public void paintComponent (Graphics g) {
 		paintCases(g);
 		paintSelectionMarker(g);
+		g.setColor(Color.black);
+		g.drawString("Banker's Current Offer: $"+cm.calcBankerOffer(), 300, 75);
 	}
 	
 	public void paintCases(Graphics g) {
@@ -66,6 +74,10 @@ public class DealNoDealGUI extends JComponent implements ActionListener, MouseLi
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		if (e.getSource() == rmvBtn && selected != null) {
+			cm.removeCase(selected.getCaseNum());
+			selected = null;
+		}
 		repaint();
 		
 	}

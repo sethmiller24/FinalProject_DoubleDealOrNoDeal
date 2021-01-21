@@ -58,16 +58,29 @@ public class CaseManager {
 		return false;		
 	}
 	
-	public void getSelections() {
-		System.out.println("Case #" + selection1.getCaseNum() + ": $" + selection1.getMoney() + " and x" + selection1.getMod());
-		System.out.println("Case #" + selection2.getCaseNum() + ": $" + selection2.getMoney() + " and x" + selection2.getMod());
+	public int calcBankerOffer() {
+		int calc = 0;
+		int count = 0;
+		for (int i = 0; i< caseChoices.size(); i++) {
+			for (int j = i+1; j < caseChoices.size(); j++) {
+				assert(i!=j);
+				System.out.println("Case #"+caseChoices.get(i).getCaseNum()+ " and Case #"+caseChoices.get(j).getCaseNum());
+				System.out.println("$"+(caseChoices.get(i).getMoney()+caseChoices.get(j).getMoney()*(
+						caseChoices.get(i).getMod()*caseChoices.get(j).getMod())));
+				calc += caseChoices.get(i).getMoney()+caseChoices.get(j).getMoney()*(
+						caseChoices.get(i).getMod()*caseChoices.get(j).getMod());
+				count++;
+			}
+		}
+		//returns 2/3 the average reward should be
+		return (2*calc)/(3*count);
 	}
 
 	public void removeCase(int caseNum) {
 		try {
-			for (OpenableCase c : contentsInPlay) {
+			for (OpenableCase c : caseChoices) {
 				if (c.getCaseNum() == caseNum) {
-					contentsInPlay.remove(contentsInPlay.indexOf(c));
+					caseChoices.remove(caseChoices.indexOf(c));
 				}
 			}
 		} catch (Exception e) {
