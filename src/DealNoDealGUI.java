@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.Icon;
@@ -11,31 +13,23 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-public class DealNoDealGUI extends JComponent implements ActionListener{
+public class DealNoDealGUI extends JComponent implements ActionListener, MouseListener{
 	CaseManager cm = new CaseManager();
 	ArrayList<OpenableCase> cases;
+	
+	OpenableCase selected;
 		
 	public void init() {
+		this.addMouseListener(this);
 		cm.resetCaseList();
 	}
-		
-	/*private PersonIcon intersectsPerson(int x, int y) {
-		PersonIcon ret = null;
-		for (PersonIcon pi: _persons) {
-			if (pi.getPoint().x <= x && pi.getPoint().y <= y &&
-					pi.getPoint().x + _personWidth >= x && 
-					pi.getPoint().y + _personHeight >= y) {
-				ret = pi;
-				break;
-			}
-		}
-		return ret;
-	}
-	
-	*/
 
 	public void paintComponent (Graphics g) {
-		
+		paintCases(g);
+		paintSelectionMarker(g);
+	}
+	
+	public void paintCases(Graphics g) {
 		for (OpenableCase c: cm.caseChoices()) {
 			g.drawImage(c.getImg(), c.getPoint().x, c.getPoint().y, this);
 			g.setColor(Color.black);
@@ -47,10 +41,64 @@ public class DealNoDealGUI extends JComponent implements ActionListener{
 		}
 	}
 	
+	public void paintSelectionMarker(Graphics g) {
+		if (selected != null) {
+			g.setColor(Color.red);
+			g.drawRect(selected.getPoint().x, selected.getPoint().y, 100, 100);
+			g.drawString("Current Selection: Case #" + selected.getCaseNum(), 300, 50);
+		}
+		
+	}
+	
+	//Modeled after Pete's intersectsPerson() Method from HW 3
+		private OpenableCase intersectCase(int x, int y) {
+			OpenableCase _case = null;
+			for (OpenableCase c: cm.caseChoices()) {
+				if (c.getPoint().x <= x && c.getPoint().x+100 >= x
+						&& c.getPoint().y <= y && c.getPoint().y+100 >= y) {
+					_case = c;
+					break;
+				}
+			}
+			return _case;
+		}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		repaint();
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		selected = intersectCase(e.getX(), e.getY());
+		repaint();
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		selected = intersectCase(e.getX(), e.getY());
+		repaint();
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 
