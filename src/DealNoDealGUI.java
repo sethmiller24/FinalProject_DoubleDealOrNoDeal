@@ -1,6 +1,8 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -16,24 +18,32 @@ import javax.swing.JPanel;
 public class DealNoDealGUI extends JComponent implements ActionListener, MouseListener{
 	CaseManager cm = new CaseManager();
 	
+	Image background = Toolkit.getDefaultToolkit().getImage("backgrnd.jpg");
+	
 	OpenableCase selected = null;
 	
-	JButton rmvBtn= new JButton("Remove");
+	JButton rmvBtn;
+	JButton lockCase = new JButton("Confirm Selection");
+	boolean case1Selected = false;
+	boolean case2Selected = false;
 		
 	public void init() {
 		this.setLayout(new BorderLayout());
 		
 		this.addMouseListener(this);
-		this.add(rmvBtn, BorderLayout.NORTH); 
-		rmvBtn.addActionListener(this);
+		
+		this.add(lockCase, BorderLayout.NORTH);
+
+		lockCase.addActionListener(this);
 		
 		cm.resetCaseList();
 	}
 
 	public void paintComponent (Graphics g) {
+		g.drawImage(background, 0, 0, this);
 		paintCases(g);
 		paintSelectionMarker(g);
-		g.setColor(Color.black);
+		g.setColor(Color.white);
 		g.drawString("Banker's Current Offer: $"+cm.calcBankerOffer(), 300, 75);
 	}
 	
@@ -73,8 +83,20 @@ public class DealNoDealGUI extends JComponent implements ActionListener, MouseLi
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if (e.getSource() == rmvBtn && selected != null) {
+		// TODO Auto-generated method stub		
+		if (e.getSource() == lockCase && selected != null) {
+			if (case1Selected) {
+				cm.selectCase(selected.getCaseNum(), 2);
+				this.remove(lockCase);
+				rmvBtn = new JButton ("Remove Case");
+				this.add(rmvBtn, BorderLayout.NORTH);
+				rmvBtn.addActionListener(this);
+			}else {
+				cm.selectCase(selected.getCaseNum(), 1);
+				case1Selected = true;
+			}
+			selected = null;
+		}else if (rmvBtn != null && e.getSource() == rmvBtn && selected != null) {
 			cm.removeCase(selected.getCaseNum());
 			selected = null;
 		}
