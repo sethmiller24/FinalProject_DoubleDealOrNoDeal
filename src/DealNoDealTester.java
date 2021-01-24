@@ -17,13 +17,6 @@ public class DealNoDealTester {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		/*
-		Random rnd = new Random();
-		for (int i = 0; i < 100; i++) {
-			System.out.println(rnd.nextInt(5));
-		}
-		*/
-	
 	}
 
 }
