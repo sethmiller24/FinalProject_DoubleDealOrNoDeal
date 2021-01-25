@@ -4,12 +4,14 @@ import java.util.Random;
 import javax.swing.JFrame;
 
 public class DealNoDealTester {
-
+	
+	//Where everything in run from
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	
 		JFrame frame = new JFrame("Double Deal Or No Deal");
 		DealNoDealGUI gui = new DealNoDealGUI();
-		gui.init();
+		//build a game with 20 cases (can change number of cases here)
+		gui.init(20);
 		
 		frame.setLayout(new BorderLayout());
 		frame.add(gui, BorderLayout.CENTER);
