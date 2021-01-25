@@ -134,7 +134,7 @@ public class DealNoDealGUI extends JComponent implements ActionListener, MouseLi
 		if (withStats) {
 			if (_case instanceof MoneyCase) {
 				contents = "$" + _case.getMoney();
-			}else {
+			}else if (_case instanceof ModCase)  {
 				contents =  "x" + _case.getMod();
 			}
 			g.drawString(contents, _case.getPoint().x + 36,
@@ -177,7 +177,7 @@ public class DealNoDealGUI extends JComponent implements ActionListener, MouseLi
 			OpenableCase _in = cm.getContentsInPlay().get(i);
 			String inString;
 			//depending on if it is a mod or money case, prints xMod or $Money accordingly
-			if (_in.getMoney() == 0)
+			if (_in instanceof ModCase)
 				inString = "x" + _in.getMod();
 			else
 				inString = "$" + _in.getMoney();
@@ -198,7 +198,7 @@ public class DealNoDealGUI extends JComponent implements ActionListener, MouseLi
 			for (int i = 0; i < cm.getContentsOutOfPlay().size(); i++) {
 				OpenableCase _out = cm.getContentsOutOfPlay().get(i);
 				String outString;
-				if (_out.getMoney() == 0)
+				if (_out instanceof ModCase)
 					outString = "x" + _out.getMod() + " from Case #" + _out.getCaseNum();
 				else
 					outString = "$" + _out.getMoney() + " from Case #" + _out.getCaseNum();
