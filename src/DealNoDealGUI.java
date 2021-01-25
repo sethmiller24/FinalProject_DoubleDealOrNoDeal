@@ -117,27 +117,35 @@ public class DealNoDealGUI extends JComponent implements ActionListener, MouseLi
 	}
 	
 	/**
-	 * Paints the specified case at it's point
-	 * @param g - where the drawing happend
+	 * Paints the specified case at it's point (with a shadow on the text)
+	 * @param g - where the drawing happened
 	 * @param _case - the desired case to be shown
 	 * @param withStats - true, paint the hidden rewards, false don't
 	 */
 	public void paintCase(Graphics g, OpenableCase _case, boolean withStats) {
+		//to print money and mod if withStats is true
+		String contents = "";
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
 
 		g.drawImage(_case.getImg(), _case.getPoint().x, _case.getPoint().y, this);
 		g.setColor(Color.black);
 		g.drawString("Case #" + _case.getCaseNum(), _case.getPoint().x + 26, _case.getPoint().y + 51);
 
-		if (withStats)
-			g.drawString("$" + _case.getMoney() + " and x" + _case.getMod(), _case.getPoint().x + 36,
+		if (withStats) {
+			if (_case instanceof MoneyCase) {
+				contents = "$" + _case.getMoney();
+			}else {
+				contents =  "x" + _case.getMod();
+			}
+			g.drawString(contents, _case.getPoint().x + 36,
 					_case.getPoint().y + 61);
-
+		}
+		
 		g.setColor(Color.white);
 		g.drawString("Case #" + _case.getCaseNum(), _case.getPoint().x + 25, _case.getPoint().y + 50);
 
 		if (withStats)
-			g.drawString("$" + _case.getMoney() + " and x" + _case.getMod(), _case.getPoint().x + 35,
+			g.drawString(contents, _case.getPoint().x + 35,
 					_case.getPoint().y + 60);
 	}
 
