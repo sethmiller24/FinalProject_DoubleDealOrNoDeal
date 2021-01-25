@@ -20,66 +20,89 @@ public class DealNoDealGUI extends JComponent implements ActionListener, MouseLi
 	CaseManager cm = new CaseManager();
 
 	Image background = Toolkit.getDefaultToolkit().getImage("backgrnd.jpg");
+	Image howie = Toolkit.getDefaultToolkit().createImage("howie.png");
 
-	OpenableCase selected = null;
+	OpenableCase selected;
 
 	JButton rmvBtn;
 	JButton lockCase = new JButton("Confirm Selection");
-	
-	JButton dealBtn = new JButton("DEAL");
-	JButton noDealBtn = new JButton ("NO DEAL");
-	
+
+	JButton dealBtn;
+	JButton noDealBtn;
+
 	JPanel btnPnl = new JPanel();
-	
+
 	boolean case1Selected = false;
 	boolean offerBankOffer = false;
+	boolean dealTaken = false;
+	boolean finishLine = false;
+
+	int finalWinnings = -1;
 
 	public void init() {
 		this.setLayout(new BorderLayout());
 
 		this.addMouseListener(this);
-		
-		//set the button to select selection 1 and 2
+
+		// set the button to select selection 1 and 2
 		this.add(lockCase, BorderLayout.NORTH);
 		lockCase.addActionListener(this);
-		
+
+		dealBtn = new JButton("DEAL");
+		noDealBtn = new JButton("NO DEAL");
+
+		selected = null;
 
 		cm.resetCaseList(25);
+		
+		repaint();
+		revalidate();
 	}
 
 	public void paintComponent(Graphics g) {
-		g.setFont(new Font(Font.SERIF, Font.BOLD, 15));
 		g.drawImage(background, 0, 0, this);
-		paintAllCases(g);
-		paintSelectionMarker(g);
-		
-		if (offerBankOffer) {
-			g.setColor(Color.white);
-			g.drawString("Banker's Current Offer: $" + cm.calcBankerOffer(), 300, 75);
+		if (finishLine) {
+			paintWinnings(g);
+		} else {
+			g.setFont(new Font(Font.SERIF, Font.BOLD, 15));
+			paintAllCases(g);
+			paintSelectionMarker(g);
+			paintRewards(g);
+
+			if (offerBankOffer) {
+				g.setColor(Color.white);
+				g.drawString("Banker's Current Offer: $" + cm.calcBankerOffer(), 300, 75);
+			}
 		}
-		paintRewards(g);
 	}
 
 	public void paintAllCases(Graphics g) {
 		for (OpenableCase c : cm.getCaseChoices()) {
-			paintCase(g, c);
+			paintCase(g, c, false);
 		}
 		if (cm.getSelection1() != null)
-			paintCase(g, cm.getSelection1());
+			paintCase(g, cm.getSelection1(), false);
 		if (cm.getSelection2() != null)
-			paintCase(g, cm.getSelection2());
+			paintCase(g, cm.getSelection2(), false);
 	}
 
-	public void paintCase(Graphics g, OpenableCase _case) {
+	public void paintCase(Graphics g, OpenableCase _case, boolean withStats) {
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+
 		g.drawImage(_case.getImg(), _case.getPoint().x, _case.getPoint().y, this);
 		g.setColor(Color.black);
 		g.drawString("Case #" + _case.getCaseNum(), _case.getPoint().x + 26, _case.getPoint().y + 51);
-		// g.drawString("$"+_case.getMoney(), _case.getPoint().x+36,
-		// _case.getPoint().y+61);
+
+		if (withStats)
+			g.drawString("$" + _case.getMoney() + " and x" + _case.getMod(), _case.getPoint().x + 36,
+					_case.getPoint().y + 61);
+
 		g.setColor(Color.white);
 		g.drawString("Case #" + _case.getCaseNum(), _case.getPoint().x + 25, _case.getPoint().y + 50);
-		// g.drawString("$"+_case.getMoney(), _case.getPoint().x+35,
-		// _case.getPoint().y+60);
+
+		if (withStats)
+			g.drawString("$" + _case.getMoney() + " and x" + _case.getMod(), _case.getPoint().x + 35,
+					_case.getPoint().y + 60);
 	}
 
 	public void paintSelectionMarker(Graphics g) {
@@ -99,37 +122,64 @@ public class DealNoDealGUI extends JComponent implements ActionListener, MouseLi
 		for (int i = 0; i < cm.getContentsInPlay().size(); i++) {
 			OpenableCase _in = cm.getContentsInPlay().get(i);
 			String inString;
-			if (_in.getMoney() == 0) 
+			if (_in.getMoney() == 0)
 				inString = "x" + _in.getMod();
-			else 
+			else
 				inString = "$" + _in.getMoney();
-			
+
 			g.setColor(Color.black);
-			g.drawString(inString,  650, i * 15 + 76);
+			g.drawString(inString, 650, i * 15 + 76);
 			g.setColor(Color.green);
 			g.drawString(inString, 651, i * 15 + 76);
 		}
-		
+
 		g.setColor(Color.black);
 		g.drawString("Lost Rewards:", 850, 60);
 		g.setColor(Color.red);
 		g.drawString("Lost Rewards:", 851, 61);
-		
+
 		if (cm.getContentsOutOfPlay() != null) {
 			for (int i = 0; i < cm.getContentsOutOfPlay().size(); i++) {
 				OpenableCase _out = cm.getContentsOutOfPlay().get(i);
 				String outString;
-				if (_out.getMoney() == 0) 
-					outString = "x" + _out.getMod() + " from Case #" + _out.getCaseNum();	
-				else 
-					outString = "$" + _out.getMoney()+ " from Case #" + _out.getCaseNum();
-				
+				if (_out.getMoney() == 0)
+					outString = "x" + _out.getMod() + " from Case #" + _out.getCaseNum();
+				else
+					outString = "$" + _out.getMoney() + " from Case #" + _out.getCaseNum();
+
 				g.setColor(Color.black);
 				g.drawString(outString, 850, i * 15 + 76);
 				g.setColor(Color.red);
 				g.drawString(outString, 851, i * 15 + 76);
 			}
 		}
+	}
+
+	public void paintWinnings(Graphics g) {
+		g.drawImage(howie, 250, 250, this);
+		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 45));
+		g.setColor(Color.black);
+		if (dealTaken) {
+			g.drawString("You Took the Deal - You Won $" + finalWinnings, 100, 100);
+			g.setColor(Color.white);
+			g.drawString("You Took the Deal - You Won $" + finalWinnings, 102, 102);
+		} else {
+			g.drawString("You Won $" + finalWinnings, 100, 100);
+			g.drawString(
+					"Using Case " + cm.getSelection1().getCaseNum() + " and Case " + cm.getSelection2().getCaseNum(),
+					100, 152);
+			g.setColor(Color.white);
+			g.drawString("You Won $" + finalWinnings, 102, 102);
+			g.drawString(
+					"Using Case " + cm.getSelection1().getCaseNum() + " and Case " + cm.getSelection2().getCaseNum(),
+					102, 152);
+
+			cm.getSelection1().setPoint(100, 500);
+			cm.getSelection2().setPoint(250, 500);
+			paintCase(g, cm.getSelection1(), true);
+			paintCase(g, cm.getSelection2(), true);
+		}
+
 	}
 
 	// Modeled after Pete's intersectsPerson() Method from HW 3
@@ -147,7 +197,7 @@ public class DealNoDealGUI extends JComponent implements ActionListener, MouseLi
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+
 		if (e.getSource() == lockCase && selected != null) {
 			if (case1Selected) {
 				cm.selectCase(selected.getCaseNum(), 2);
@@ -170,45 +220,90 @@ public class DealNoDealGUI extends JComponent implements ActionListener, MouseLi
 				cm.removeCase(selected.getCaseNum());
 				offerBankOffer = false;
 			}
-		}else if (e.getSource() == dealBtn) {
+		} else if (e.getSource() == dealBtn) {
 			this.remove(btnPnl);
-			
-			this.add(rmvBtn, BorderLayout.NORTH);
-			rmvBtn.addActionListener(this);
-			
-			revalidate();
-		}else if (e.getSource() == noDealBtn) {
+			if (cm.getCaseChoices().size() == 2) {
+				finalFour();
+
+			} else {
+
+				dealTaken = true;
+				takeDeal();
+
+				revalidate();
+			}
+		} else if (e.getSource() == noDealBtn) {
 			this.remove(btnPnl);
-			
-			this.add(rmvBtn, BorderLayout.NORTH);
-			rmvBtn.addActionListener(this);
-			
-			revalidate();
-		}
+			if (cm.getCaseChoices().size() == 2) {
+				cm.selectCase(cm.getCaseChoices().get(0).getCaseNum(), 1);
+				cm.selectCase(cm.getCaseChoices().get(1).getCaseNum(), 2);
+				finalFour();
+			} else {
+
+				this.add(rmvBtn, BorderLayout.NORTH);
+				rmvBtn.addActionListener(this);
+
+				revalidate();
+			}
+		} 
 
 		selected = null;
-		
+
 		int casesLeft = cm.getCaseChoices().size();
-		if ((casesLeft == 2 || casesLeft%5 == 0) && offerBankOffer == false) {
+		if ((casesLeft % 10 == 0 || casesLeft == 6 || casesLeft == 3) && offerBankOffer == false) {
+			offerBankOffer = true;
+			this.remove(rmvBtn);
+			addDealPnl();
+		} else if (casesLeft == 2) {
 			offerBankOffer = true;
 			this.remove(rmvBtn);
 			addDealPnl();
 		}
-		
+
 		revalidate();
 		repaint();
 
 	}
-	
+
+	public void takeDeal() {
+		dealTaken = true;
+		finishLine = true;
+		finalWinnings = (cm.calcBankerOffer());
+
+		repaint();
+	}
+
+	public void finalFour() {
+		assert (cm.getCaseChoices().size() == 2);
+		finalWinnings = ((int) ((cm.getSelection1().getMoney() + cm.getSelection2().getMoney())
+				* cm.getSelection1().getMod() * cm.getSelection2().getMod()));
+		finishLine = true;
+		repaint();
+	}
+
 	private void addDealPnl() {
 		btnPnl = new JPanel();
-		btnPnl.add(dealBtn);
-		btnPnl.add(noDealBtn);
-		
-		dealBtn.addActionListener(this);
-		noDealBtn.addActionListener(this);
-		
-		this.add(btnPnl, BorderLayout.NORTH);
+
+		if (finalWinnings != -1) {
+			this.remove(btnPnl);
+			this.remove(rmvBtn);
+		} else {
+			if (cm.getCaseChoices().size() == 2) {
+				dealBtn = new JButton("Choose Case " + cm.getSelection1().getCaseNum() + " and Case "
+						+ cm.getSelection2().getCaseNum());
+				noDealBtn = new JButton("Choose Case " + cm.getCaseChoices().get(0).getCaseNum() + " and Case "
+						+ cm.getCaseChoices().get(1).getCaseNum());
+			}
+
+			btnPnl.add(dealBtn);
+			btnPnl.add(noDealBtn);
+
+			dealBtn.addActionListener(this);
+			noDealBtn.addActionListener(this);
+
+			this.add(btnPnl, BorderLayout.NORTH);
+		}
+		revalidate();
 	}
 
 	@Override

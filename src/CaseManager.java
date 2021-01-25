@@ -67,7 +67,7 @@ public class CaseManager {
 	}
 
 	public void selectCase(int caseChosen, int selection) {
-		assert (caseChosen > 0 && caseChosen <= contentsInPlay.size() && (selection == 1 || selection == 2));
+		assert (caseChosen > 0  && (selection == 1 || selection == 2));
 
 		for (OpenableCase c : caseChoices) {
 			if (c.getCaseNum() == caseChosen) {
