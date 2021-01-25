@@ -22,7 +22,11 @@ public class MoneyCase implements OpenableCase {
 			Toolkit.getDefaultToolkit().getImage("case5.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
 			Toolkit.getDefaultToolkit().getImage("case6.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
 			Toolkit.getDefaultToolkit().getImage("case7.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
-			Toolkit.getDefaultToolkit().getImage("case8.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH) };
+			Toolkit.getDefaultToolkit().getImage("case8.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
+			Toolkit.getDefaultToolkit().getImage("case9.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
+			Toolkit.getDefaultToolkit().getImage("case10.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
+			Toolkit.getDefaultToolkit().getImage("case11.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
+			Toolkit.getDefaultToolkit().getImage("case12.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH) };
 
 	/**
 	 * Builds a Case with the given money and random Image from imgs

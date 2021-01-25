@@ -16,14 +16,19 @@ public class ModCase implements OpenableCase{
 	private Image caseImg;
 	
 	//pre-loaded images
-	private Image [] imgs = {Toolkit.getDefaultToolkit().getImage("case1.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
+	private Image[] imgs = {
+			Toolkit.getDefaultToolkit().getImage("case1.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
 			Toolkit.getDefaultToolkit().getImage("case2.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
 			Toolkit.getDefaultToolkit().getImage("case3.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
 			Toolkit.getDefaultToolkit().getImage("case4.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
 			Toolkit.getDefaultToolkit().getImage("case5.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
 			Toolkit.getDefaultToolkit().getImage("case6.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
 			Toolkit.getDefaultToolkit().getImage("case7.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
-			Toolkit.getDefaultToolkit().getImage("case8.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH)};
+			Toolkit.getDefaultToolkit().getImage("case8.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
+			Toolkit.getDefaultToolkit().getImage("case9.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
+			Toolkit.getDefaultToolkit().getImage("case10.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
+			Toolkit.getDefaultToolkit().getImage("case11.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH),
+			Toolkit.getDefaultToolkit().getImage("case12.png").getScaledInstance(100, 100, Image.SCALE_SMOOTH) };
 	
 	/**
 	 * Builds a Case with the given mod value and a random image from imgs

@@ -21,7 +21,6 @@ public class CaseManager {
 
 	/**
 	 * Builds the game with size number of cases
-	 * 
 	 * @param size - the number of cases wanted
 	 */
 	public void resetCaseList(int size) {
@@ -58,7 +57,6 @@ public class CaseManager {
 
 	/**
 	 * Getter for CaseChoices
-	 * 
 	 * @return CaseChoices - arraylist of cases that the user should interact with
 	 */
 	public ArrayList<OpenableCase> getCaseChoices() {
