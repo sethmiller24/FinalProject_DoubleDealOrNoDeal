@@ -11,7 +11,7 @@ public class DealNoDealTester {
 		JFrame frame = new JFrame("Double Deal Or No Deal");
 		DealNoDealGUI gui = new DealNoDealGUI();
 		//build a game with 25 cases (can change number of cases here)
-		gui.init(6);
+		gui.init(25);
 		
 		frame.setLayout(new BorderLayout());
 		frame.add(gui, BorderLayout.CENTER);

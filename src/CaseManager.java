@@ -3,7 +3,7 @@ import java.util.Random;
 
 /**
  * 
- * @author seth miller This handles the organization of the Cases, representing
+ * @author Seth miller This handles the organization of the Cases, representing
  *         the group of cases in this game
  */
 public class CaseManager {
@@ -168,12 +168,12 @@ public class CaseManager {
 	}
 
 	/**
-	 * represents how the play can no longer choose
-	 * 
+	 * represents how the player can no longer select this case 
 	 * @param caseNum - the caseNum associated with the case to be removed
 	 */
 	public void removeFromChoices(int caseNum) {
 		try {
+			//for some reason .remove only worked with try catch
 			for (OpenableCase cases : caseChoices) {
 				if (cases.getCaseNum() == caseNum) {
 					caseChoices.remove(caseChoices.indexOf(cases));
@@ -189,6 +189,7 @@ public class CaseManager {
 	 */
 	public void removeFromInPlay(int caseNum) {
 		try {
+			//for some reason .remove only worked with try catch
 			for (OpenableCase contents : contentsInPlay) {
 				if (contents.getCaseNum() == caseNum) {
 					//add it to contentsOutOfPlay for List of removed cases/winnings
